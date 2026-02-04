@@ -4,11 +4,11 @@
 [ext_resource type="Script" uid="uid://bd4r10h1j47fr" path="res://scripts/basic_enemy.gd" id="1_nxt13"]
 [ext_resource type="Texture2D" uid="uid://cux5a4gok070l" path="res://sprites/enemy1.png" id="1_p4w0v"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_j0e3d"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_nxt13"]
 atlas = ExtResource("1_p4w0v")
 region = Rect2(0, 16, 16, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_nxt13"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_6pnyy"]
 atlas = ExtResource("1_p4w0v")
 region = Rect2(16, 16, 16, 16)
 
@@ -16,10 +16,10 @@ region = Rect2(16, 16, 16, 16)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_j0e3d")
+"texture": SubResource("AtlasTexture_nxt13")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_nxt13")
+"texture": SubResource("AtlasTexture_6pnyy")
 }],
 "loop": true,
 "name": &"walk",
@@ -29,7 +29,7 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p4w0v"]
 size = Vector2(12, 14)
 
-[node name="BasicEnemy" type="Node2D" unique_id=679979317]
+[node name="BasicEnemy" type="CharacterBody2D" unique_id=1042046870]
 scale = Vector2(2.5, 2.5)
 script = ExtResource("1_nxt13")
 
@@ -45,9 +45,8 @@ texture_scale = 0.15
 sprite_frames = SubResource("SpriteFrames_6pnyy")
 animation = &"walk"
 autoplay = "walk"
-frame_progress = 0.6786835
+frame_progress = 0.6562531
 
-[node name="Area2D" type="Area2D" parent="." unique_id=1860055144]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=264125637]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=264125637]
+scale = Vector2(0.99999994, 0.99999994)
 shape = SubResource("RectangleShape2D_p4w0v")
