@@ -117,42 +117,42 @@ animations = [{
 "speed": 8.0
 }]
 
-[node name="Node2D" type="Node2D" unique_id=1400274704]
-z_index = 1
-
-[node name="Player" type="CharacterBody2D" parent="." unique_id=106510493]
+[node name="Player" type="CharacterBody2D" unique_id=106510493]
 slide_on_ceiling = false
 script = ExtResource("1_8vds6")
 
-[node name="PointLight2D" type="PointLight2D" parent="Player" unique_id=1388464071]
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1388464071]
 color = Color(1, 1, 0.784314, 1)
 shadow_enabled = true
 texture = ExtResource("2_3topc")
 texture_scale = 0.35
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=1900093442]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1900093442]
 position = Vector2(0, 1)
 scale = Vector2(0.929012, 0.929012)
 shape = SubResource("RectangleShape2D_sdb2s")
 
-[node name="Area2D" type="Area2D" parent="Player" unique_id=279249030]
+[node name="Area2D" type="Area2D" parent="." unique_id=279249030]
 scale = Vector2(0.939643, 0.939643)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Area2D" unique_id=1759158457]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1759158457]
 position = Vector2(0, 1.00912)
 shape = SubResource("RectangleShape2D_bp7kc")
 
-[node name="top" type="AnimatedSprite2D" parent="Player" unique_id=1717977161]
+[node name="top" type="AnimatedSprite2D" parent="." unique_id=1717977161]
 scale = Vector2(2.5, 2.5)
 sprite_frames = SubResource("SpriteFrames_4f1st")
 animation = &"none"
 
-[node name="bottom" type="AnimatedSprite2D" parent="Player" unique_id=688167458]
+[node name="bottom" type="AnimatedSprite2D" parent="." unique_id=688167458]
 position = Vector2(0, 17)
 scale = Vector2(2.5, 2.5)
 sprite_frames = SubResource("SpriteFrames_7cu50")
 animation = &"idle"
 
-[node name="Timer" type="Timer" parent="Player" unique_id=1439914361]
+[node name="Timer" type="Timer" parent="." unique_id=1439914361]
 wait_time = 0.35
 one_shot = true
+
+[node name="Node2D" type="Node2D" parent="." unique_id=1400274704]
+z_index = 1

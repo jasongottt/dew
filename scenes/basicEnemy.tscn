@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://77l214eqov24"]
+
+[ext_resource type="Texture2D" uid="uid://cjt8nslnir1g6" path="res://sprites/light.webp" id="1_j0e3d"]
+[ext_resource type="Script" uid="uid://bd4r10h1j47fr" path="res://scripts/basic_enemy.gd" id="1_nxt13"]
+[ext_resource type="Texture2D" uid="uid://cux5a4gok070l" path="res://sprites/enemy1.png" id="1_p4w0v"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j0e3d"]
+atlas = ExtResource("1_p4w0v")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nxt13"]
+atlas = ExtResource("1_p4w0v")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6pnyy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j0e3d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nxt13")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 2.5
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p4w0v"]
+size = Vector2(12, 14)
+
+[node name="BasicEnemy" type="Node2D" unique_id=679979317]
+scale = Vector2(2.5, 2.5)
+script = ExtResource("1_nxt13")
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=910457084]
+scale = Vector2(0.99999994, 0.99999994)
+color = Color(1, 0.6736565, 0.4929595, 1)
+energy = 0.8
+shadow_enabled = true
+texture = ExtResource("1_j0e3d")
+texture_scale = 0.15
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1179083772]
+sprite_frames = SubResource("SpriteFrames_6pnyy")
+animation = &"walk"
+autoplay = "walk"
+frame_progress = 0.083501704
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1860055144]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=264125637]
+shape = SubResource("RectangleShape2D_p4w0v")
