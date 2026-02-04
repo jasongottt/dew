@@ -45,7 +45,7 @@ texture_scale = 0.15
 sprite_frames = SubResource("SpriteFrames_6pnyy")
 animation = &"walk"
 autoplay = "walk"
-frame_progress = 0.083501704
+frame_progress = 0.6786835
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1860055144]
 
