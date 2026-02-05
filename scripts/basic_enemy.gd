@@ -27,6 +27,10 @@ func _physics_process(delta):
 	if moving:
 		velocity = move_direction * move_speed
 		move_and_slide()
+		if get_slide_collision_count() > 0:
+			velocity = Vector2.ZERO
+			moving = false
+			return
 
 		if is_on_wall():
 			velocity = Vector2.ZERO

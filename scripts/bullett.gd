@@ -7,8 +7,5 @@ func _process(delta):
 	var motion = Vector2(cos(self.rotation), sin(self.rotation)) * SPEED
 	position += motion * delta
 
-
-	
-
 func _on_body_entered(body):
 	queue_free()
