@@ -29,8 +29,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p4w0v"]
 size = Vector2(15.200002, 16.000002)
 
-[node name="BasicEnemy" type="CharacterBody2D" unique_id=1042046870]
+[node name="BasicEnemy" type="CharacterBody2D" unique_id=1042046870 groups=["enemies"]]
 scale = Vector2(2.5, 2.5)
+collision_layer = 3
 script = ExtResource("1_nxt13")
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=910457084]
@@ -45,7 +46,7 @@ texture_scale = 0.15
 sprite_frames = SubResource("SpriteFrames_6pnyy")
 animation = &"walk"
 autoplay = "walk"
-frame_progress = 0.84564775
+frame_progress = 0.6322646
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=264125637]
 position = Vector2(0.3999999, 1.9073484e-07)
