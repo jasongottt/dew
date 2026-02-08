@@ -118,6 +118,7 @@ animations = [{
 }]
 
 [node name="Player" type="CharacterBody2D" unique_id=106510493]
+z_index = 7
 slide_on_ceiling = false
 script = ExtResource("1_8vds6")
 

@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 @export var move_speed := 75.0
 @export var step_distance := 100.0
+@export var death_mark_scene: PackedScene
 
 var player: Node2D
 var target_position: Vector2
@@ -41,3 +42,11 @@ func _physics_process(delta):
 			global_position = target_position
 			velocity = Vector2.ZERO
 			moving = false
+
+func die():
+	if death_mark_scene:
+		var mark = death_mark_scene.instantiate()
+		mark.global_position = global_position
+		get_parent().add_child(mark)
+
+	queue_free()

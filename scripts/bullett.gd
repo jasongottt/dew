@@ -10,4 +10,4 @@ func _process(delta):
 func _on_body_entered(body):
 	queue_free()
 	if body.is_in_group("enemies"):
-		body.queue_free()
+		body.die()

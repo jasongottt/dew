@@ -142,7 +142,7 @@ tile_map_data = PackedByteArray("AAAJAAIAAAADAAAAAAAKAAIAAAADAAAAAAALAAIAAAADAAA
 tile_set = SubResource("TileSet_2qpke")
 
 [node name="border" type="TileMapLayer" parent="." unique_id=653576185]
-z_index = 2
+z_index = 17
 use_parent_material = true
 position = Vector2(104, 32)
 scale = Vector2(2.5, 2.5)
