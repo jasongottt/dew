@@ -5,10 +5,10 @@ extends Node2D
 
 const SPAWN_TILES := {
 	"top": [
-		Vector2i(763, 92), Vector2i(803, 92), Vector2i(843, 92)
+		Vector2i(765, 92), Vector2i(803, 92), Vector2i(843, 92)
 	],
 	"bottom": [
-		Vector2i(763, 812), Vector2i(803, 812), Vector2i(843, 812)
+		Vector2i(765, 812), Vector2i(803, 812), Vector2i(843, 812)
 	],
 	"left": [
 		Vector2i(441, 412), Vector2i(441, 452), Vector2i(441, 492)

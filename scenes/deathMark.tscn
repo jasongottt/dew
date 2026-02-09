@@ -1,38 +1,35 @@
 [gd_scene format=3 uid="uid://cdudllt4atgiw"]
 
-[ext_resource type="Texture2D" uid="uid://cux5a4gok070l" path="res://sprites/enemy1.png" id="1_cmgle"]
 [ext_resource type="Script" uid="uid://cjayc70svj4xs" path="res://scripts/death_mark.gd" id="1_t0jfh"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_t0jfh"]
-atlas = ExtResource("1_cmgle")
-region = Rect2(32, 16, 16, 16)
+[ext_resource type="Texture2D" uid="uid://cqishclvgf6n3" path="res://sprites/sheet.png" id="2_t0jfh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hytox"]
-atlas = ExtResource("1_cmgle")
-region = Rect2(48, 16, 16, 16)
+atlas = ExtResource("2_t0jfh")
+region = Rect2(112, 16, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m4vky"]
-atlas = ExtResource("1_cmgle")
-region = Rect2(64, 16, 16, 16)
+atlas = ExtResource("2_t0jfh")
+region = Rect2(128, 16, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ytkfj"]
-atlas = ExtResource("1_cmgle")
-region = Rect2(80, 16, 16, 16)
+atlas = ExtResource("2_t0jfh")
+region = Rect2(144, 16, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4g8pb"]
-atlas = ExtResource("1_cmgle")
-region = Rect2(96, 16, 16, 16)
+atlas = ExtResource("2_t0jfh")
+region = Rect2(160, 16, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6mdja"]
-atlas = ExtResource("1_cmgle")
-region = Rect2(112, 16, 16, 16)
+atlas = ExtResource("2_t0jfh")
+region = Rect2(176, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iakde"]
+atlas = ExtResource("2_t0jfh")
+region = Rect2(192, 16, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_0cboo"]
 animations = [{
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_t0jfh")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_hytox")
 }, {
@@ -47,6 +44,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_6mdja")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iakde")
 }],
 "loop": false,
 "name": &"basic",
@@ -61,5 +61,5 @@ scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_0cboo")
 animation = &"basic"
 autoplay = "basic"
-frame = 1
-frame_progress = 0.232906
+frame = 5
+frame_progress = 1.0
