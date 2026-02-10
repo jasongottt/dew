@@ -80,6 +80,21 @@ texture = ExtResource("1_hjoxn")
 4:4/0 = 0
 0:10/0 = 0
 1:10/0 = 0
+3:9/animation_speed = 0.5
+3:9/animation_frame_0/duration = 1.0
+3:9/animation_frame_1/duration = 1.0
+3:9/0 = 0
+3:9/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:8/animation_speed = 0.5
+3:8/animation_frame_0/duration = 1.0
+3:8/animation_frame_1/duration = 1.0
+3:8/0 = 0
+3:8/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+4:3/animation_speed = 2.0
+4:3/animation_frame_0/duration = 1.0
+4:3/animation_frame_1/duration = 1.0
+4:3/animation_frame_2/duration = 1.0
+4:3/0 = 0
 
 [resource]
 physics_layer_0/collision_layer = 7
