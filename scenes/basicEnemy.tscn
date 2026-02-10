@@ -37,6 +37,7 @@ script = ExtResource("1_nxt13")
 death_mark_scene = ExtResource("2_6pnyy")
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=910457084]
+visible = false
 scale = Vector2(0.99999994, 0.99999994)
 color = Color(1, 0.6736565, 0.4929595, 1)
 energy = 0.8

@@ -123,6 +123,7 @@ slide_on_ceiling = false
 script = ExtResource("1_8vds6")
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1388464071]
+visible = false
 color = Color(1, 1, 0.784314, 1)
 shadow_enabled = true
 texture = ExtResource("2_3topc")
