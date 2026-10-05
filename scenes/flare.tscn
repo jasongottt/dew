@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/flare.gd" id="1_flare"]
+[ext_resource type="Texture2D" path="res://sprites/flare.png" id="2_flare"]
+[ext_resource type="Texture2D" uid="uid://cjt8nslnir1g6" path="res://sprites/light.webp" id="3_flare"]
+
+[node name="Flare" type="Node2D" groups=["flares"]]
+z_index = 1
+script = ExtResource("1_flare")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("2_flare")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+visible = false
+color = Color(1, 0.45, 0.35, 1)
+texture = ExtResource("3_flare")
+texture_scale = 0.4

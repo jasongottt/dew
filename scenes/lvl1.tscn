@@ -4,11 +4,20 @@
 [ext_resource type="Script" uid="uid://o7bl8ntt8g6w" path="res://scripts/enemy_spawner.gd" id="1_xmh5c"]
 [ext_resource type="Texture2D" uid="uid://cqishclvgf6n3" path="res://sprites/sheet.png" id="2_0jtq1"]
 [ext_resource type="TileSet" uid="uid://bl3pftf0awvm1" path="res://sprites/tileset.tres" id="3_xmh5c"]
+[ext_resource type="Script" uid="uid://d3ycfkbpj8fsq" path="res://scripts/level.gd" id="4_lvl1"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="5_hud"]
+[ext_resource type="Texture2D" uid="uid://cmqvvmlj0mc88" path="res://sprites/arrow.png" id="6_arrow"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(120, 20)
 
 [node name="lvl1" type="Node2D" unique_id=85038059]
+script = ExtResource("4_lvl1")
+has_shop = true
 
-[node name="EnemySpawner" type="Node2D" parent="." unique_id=314370287]
+[node name="EnemySpawner" type="Node2D" parent="." unique_id=314370287 node_paths=PackedStringArray("tiles")]
 script = ExtResource("1_xmh5c")
+tiles = NodePath("../floor")
 
 [node name="black" type="Sprite2D" parent="." unique_id=1370089033]
 modulate = Color(0, 0, 0, 1)
@@ -48,7 +57,26 @@ scale = Vector2(2.5, 2.5)
 tile_map_data = PackedByteArray("AAAIAAkAAQAAAAYAAAAIAAoAAQAAAAYAAAAIAAsAAQAAAAYAAAAIAAwAAQAAAAYAAAAPAAEAAQAAAAYAAAAQAAEAAQAAAAYAAAARAAEAAQAAAAYAAAASAAEAAQAAAAYAAAATAAEAAQAAAAYAAAAaAAgAAQAAAAYAAAAaAAkAAQAAAAYAAAAaAAoAAQAAAAYAAAAaAAsAAQAAAAYAAAAaAAwAAQAAAAYAAAAPABMAAQAAAAYAAAAQABMAAQAAAAYAAAARABMAAQAAAAYAAAASABMAAQAAAAYAAAATABMAAQAAAAYAAAAIAAgAAQAAAAYAAAAHAAgAAQAAAAYAAAAHAAkAAQAAAAYAAAAHAAoAAQAAAAYAAAAHAAsAAQAAAAYAAAAHAAwAAQAAAAYAAAAPABQAAQAAAAYAAAAQABQAAQAAAAYAAAARABQAAQAAAAYAAAASABQAAQAAAAYAAAATABQAAQAAAAYAAAAbAAwAAQAAAAYAAAAbAAsAAQAAAAYAAAAbAAoAAQAAAAYAAAAbAAkAAQAAAAYAAAAbAAgAAQAAAAYAAAAPAAAAAQAAAAYAAAAQAAAAAQAAAAYAAAARAAAAAQAAAAYAAAASAAAAAQAAAAYAAAATAAAAAQAAAAYAAAA=")
 tile_set = ExtResource("3_xmh5c")
 
+[node name="Exit" type="Area2D" parent="." unique_id=1843306175]
+position = Vector2(804, 822)
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exit" unique_id=1302917364]
+shape = SubResource("RectangleShape2D_exit")
+
 [node name="Player" parent="." unique_id=2034163411 instance=ExtResource("1_h64uy")]
 position = Vector2(800, 448)
-collision_layer = 5
-collision_mask = 5
+collision_layer = 4
+collision_mask = 4
+
+[node name="ExitArrow" type="Sprite2D" parent="." unique_id=1665041928]
+visible = false
+z_index = 1
+position = Vector2(804, 732)
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("6_arrow")
+
+[node name="HUD" parent="." unique_id=577210846 instance=ExtResource("5_hud")]
+
+[connection signal="body_entered" from="Exit" to="." method="_on_exit_body_entered"]
+[connection signal="died" from="Player" to="." method="_on_player_died"]
