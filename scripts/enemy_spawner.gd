@@ -3,7 +3,12 @@ extends Node2D
 # put a scene in more than once to make it spawn more often
 @export var enemy_scenes: Array[PackedScene] = [preload("res://scenes/basicEnemy.tscn")]
 @export var tiles: TileMapLayer
-@export var wait_time: float = 1.0
+# seconds between spawns at the start of the wave, and by the end of it
+@export var wait_start: float = 2.0
+@export var wait_end: float = 0.8
+# how many arrive at once at the start of the wave, and by the end of it
+@export var group_start: int = 1
+@export var group_end: int = 2
 
 const SPAWN_TILES := {
 	"top": [
@@ -23,9 +28,16 @@ var time_elapsed: float = 0.0
 
 func _process(delta):
 	time_elapsed += delta
+	var wait_time = lerp(wait_start, wait_end, progress())
 	if time_elapsed >= wait_time:
 		time_elapsed -= wait_time # Reset the timer
-		spawn_enemy()
+		for i in roundi(lerp(float(group_start), float(group_end), progress())):
+			spawn_enemy()
+
+# how far through the wave we are, 0 at the start and 1 at the end
+func progress():
+	var level = get_parent()
+	return clamp(1.0 - level.time_left / level.wave_time, 0.0, 1.0)
 		
 func spawn_enemy():
 	var scene = enemy_scenes.pick_random()

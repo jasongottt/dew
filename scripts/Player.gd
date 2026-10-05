@@ -2,11 +2,16 @@ extends CharacterBody2D
 
 signal died
 
-var movespeed = 200
+@export var movespeed = 200
+# seconds between shots, before gun upgrades
+@export var shoot_delay = 0.35
+# how long the muzzle flash shows for each shot
+@export var muzzle_flash_time = 0.05
+
 var bullet = preload("res://scenes/bullett.tscn")
 var bullet_rotation = 0
 var invincible = false
-var shoot_delay = 0.35
+var flash_left = 0.0
 var effects = {}
 # 1 is a fully white screen, fades back to 0 over a second
 var whiteout = 0.0
@@ -20,6 +25,8 @@ func _physics_process(delta):
 		if effects[effect] <= 0:
 			effects.erase(effect)
 	whiteout = max(whiteout - delta, 0)
+	flash_left -= delta
+	$MuzzleFlash.visible = flash_left > 0
 	if has_effect("whiskey"):
 		modulate = Color(1, 0.8, 0.5)
 	elif has_effect("trench_coat"):
@@ -104,6 +111,12 @@ func shoot():
 		bullet_instance.rotation_degrees = angle
 		bullet_instance.damage = 1 + Game.ammo
 		get_parent().call_deferred("add_child",bullet_instance)
+
+	# flash at the end of the gun, it lights things up on dark levels
+	$MuzzleFlash.position = Vector2.RIGHT.rotated(deg_to_rad(bullet_rotation)) * 24
+	$MuzzleFlash/PointLight2D.visible = get_parent().get("dark") == true
+	$MuzzleFlash.visible = true
+	flash_left = muzzle_flash_time
 
 func has_effect(effect):
 	return effects.has(effect)
