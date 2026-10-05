@@ -14,6 +14,6 @@ func _process(_delta):
 	else:
 		$Item/Icon.texture = load("res://sprites/items/%s.png" % Game.held_item)
 
-	if Input.is_action_just_pressed("pause"):
+	if Input.is_action_just_pressed("pause") and not level.frozen:
 		get_tree().paused = not get_tree().paused
 		$Paused.visible = get_tree().paused
