@@ -33,6 +33,7 @@ size = Vector2(15.200002, 16.000002)
 [node name="BasicEnemy" type="CharacterBody2D" unique_id=1042046870 groups=["enemies"]]
 scale = Vector2(2.5, 2.5)
 collision_layer = 3
+motion_mode = 1
 script = ExtResource("1_nxt13")
 death_mark_scene = ExtResource("2_6pnyy")
 

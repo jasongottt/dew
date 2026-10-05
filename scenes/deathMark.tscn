@@ -57,7 +57,7 @@ animations = [{
 script = ExtResource("1_t0jfh")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=862183334]
-scale = Vector2(3, 3)
+scale = Vector2(2.5, 2.5)
 sprite_frames = SubResource("SpriteFrames_0cboo")
 animation = &"basic"
 autoplay = "basic"

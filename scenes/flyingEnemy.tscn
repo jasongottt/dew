@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://77l214eqov24" path="res://scenes/basicEnemy.tscn" id="1_base"]
+
+[node name="FlyingEnemy" instance=ExtResource("1_base")]
+collision_mask = 0
+move_speed = 60.0
+flying = true
+
+[node name="AnimatedSprite2D" parent="." index="1"]
+modulate = Color(0.6, 1, 0.6, 1)
