@@ -15,6 +15,7 @@ var shop_scene = preload("res://scenes/shop.tscn")
 var time_left := 0.0
 var exit_open := false
 var arrow_time := 0.0
+var frozen := false
 
 func _ready():
 	time_left = wave_time
@@ -53,6 +54,12 @@ func open_exit():
 
 func _on_player_died():
 	Game.lives -= 1
+	# everything stops for a second so you can see what got you
+	frozen = true
+	get_tree().paused = true
+	await get_tree().create_timer(1.0).timeout
+	get_tree().paused = false
+	frozen = false
 	if Game.lives < 0:
 		Game.game_over()
 		return
