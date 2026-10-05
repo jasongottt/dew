@@ -8,6 +8,8 @@ extends Node2D
 @export var dark := false
 # a black cat runs across now and then, the mob chases it
 @export var black_cat := false
+# makes this a boss fight: no timer, no regular spawns
+@export var boss_scene: PackedScene
 
 const EXIT_TILES = [Vector2i(16, 19), Vector2i(17, 19), Vector2i(18, 19)]
 const SHOP_TILE = Vector2i(17, 6)
@@ -22,16 +24,27 @@ var time_left := 0.0
 var exit_open := false
 var arrow_time := 0.0
 var frozen := false
+var boss = null
 
 func _ready():
 	time_left = wave_time
 	cat_time = randf_range(25, 45)
 	if dark:
-		var shade = CanvasModulate.new()
-		shade.name = "Dark"
-		shade.color = DARK_COLOR
-		add_child(shade)
-		$Player/PointLight2D.visible = true
+		go_dark()
+	if boss_scene:
+		time_left = 0
+		$EnemySpawner.set_process(false)
+		boss = boss_scene.instantiate()
+		boss.global_position = tile_position(SHOP_TILE)
+		add_child(boss)
+
+func go_dark():
+	dark = true
+	var shade = CanvasModulate.new()
+	shade.name = "Dark"
+	shade.color = DARK_COLOR
+	add_child(shade)
+	$Player/PointLight2D.visible = true
 
 func _process(delta):
 	# the flashbulb lights everything up for a moment
@@ -99,10 +112,13 @@ func _on_player_died():
 	if Game.lives < 0:
 		Game.game_over()
 		return
+	# a boss keeps the damage you've done, everything else goes
 	for enemy in get_tree().get_nodes_in_group("enemies"):
-		enemy.queue_free()
+		if not enemy.is_in_group("bosses"):
+			enemy.queue_free()
 	for bullet in get_tree().get_nodes_in_group("enemy_bullets"):
 		bullet.queue_free()
+	get_tree().call_group("bosses", "idle_for", 2.0)
 	$Player.respawn()
 
 func _on_exit_body_entered(body):

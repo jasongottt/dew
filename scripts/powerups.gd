@@ -47,7 +47,10 @@ func drop(scene):
 
 func kill_everything():
 	for enemy in get_tree().get_nodes_in_group("enemies"):
-		enemy.die(false)
+		if enemy.is_in_group("bosses"):
+			enemy.damage_boss(10)
+		else:
+			enemy.die(false)
 
 func flip_coin():
 	var heads = randf() < 0.5

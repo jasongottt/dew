@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://77l214eqov24" path="res://scenes/basicEnemy.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scripts/man_in_the_rain.gd" id="2_script"]
+
+[node name="ManInTheRain" instance=ExtResource("1_base")]
+scale = Vector2(5, 5)
+collision_mask = 0
+script = ExtResource("2_script")
+move_speed = 40.0
+health = 150
+drop_chance = 0.0
+flying = true
+
+[node name="AnimatedSprite2D" parent="." index="1"]
+modulate = Color(0, 0, 0, 1)
