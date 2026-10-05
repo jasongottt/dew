@@ -9,6 +9,13 @@ func _process(delta):
 	position += motion * delta
 
 func _on_body_entered(body):
-	queue_free()
 	if body.is_in_group("enemies"):
+		if body.dead:
+			return
+		var health = body.health
 		body.hit(damage)
+		# upgraded ammo keeps going with whatever damage is left over
+		damage -= health
+		if damage > 0:
+			return
+	queue_free()
