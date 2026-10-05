@@ -25,6 +25,8 @@ const SPAWN_TILES := {
 	]
 }
 var time_elapsed: float = 0.0
+# spots handed out since the last frame, those enemies aren't in the level yet
+var placed_this_frame = []
 
 func _process(delta):
 	time_elapsed += delta
@@ -51,17 +53,42 @@ func spawn_enemy():
 			place(scene.instantiate(), spot[0] + spot[1] * 50 * i)
 		return
 
-	# a group takes up one tile each in the same gate
-	var gate = SPAWN_TILES[SPAWN_TILES.keys().pick_random()].duplicate()
+	# a group takes up one free tile each in the same gate.
+	# if every gate is busy this one just doesn't come
+	var gates = []
+	for gate_tiles in SPAWN_TILES.values():
+		var free = gate_tiles.filter(func(tile): return is_free(tile_position(tile)))
+		if not free.is_empty():
+			gates.append(free)
+	if gates.is_empty():
+		enemy.free()
+		return
+	var gate = gates.pick_random()
 	gate.shuffle()
 	place(enemy, tile_position(gate[0]))
 	for i in range(1, min(enemy.group_size, gate.size())):
 		place(scene.instantiate(), tile_position(gate[i]))
 
 func spawn_at(tile):
-	place(enemy_scenes.pick_random().instantiate(), tile_position(tile))
+	if is_free(tile_position(tile)):
+		place(enemy_scenes.pick_random().instantiate(), tile_position(tile))
+
+# two enemies started exactly on top of each other lock together
+# and never come out of the gate, so never put one where another is
+func is_free(spot):
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if enemy.global_position.distance_to(spot) < 30:
+			return false
+	for taken in placed_this_frame:
+		if taken.distance_to(spot) < 30:
+			return false
+	return true
 
 func place(enemy, spot):
+	# by the end of the frame they're in the level and count for themselves
+	if placed_this_frame.is_empty():
+		placed_this_frame.clear.call_deferred()
+	placed_this_frame.append(spot)
 	enemy.global_position = spot
 	get_parent().add_child.call_deferred(enemy)
 
