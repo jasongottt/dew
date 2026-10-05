@@ -25,6 +25,7 @@ var exit_open := false
 var arrow_time := 0.0
 var frozen := false
 var boss = null
+var leaving := false
 
 func _ready():
 	time_left = wave_time
@@ -122,8 +123,8 @@ func _on_player_died():
 	$Player.respawn()
 
 func _on_exit_body_entered(body):
-	if exit_open and body == $Player:
-		if next_level:
-			get_tree().change_scene_to_packed.call_deferred(next_level)
-		else:
-			get_tree().reload_current_scene.call_deferred()
+	if exit_open and not leaving and body == $Player:
+		leaving = true
+		# no next level yet, so this one again
+		var scene = next_level if next_level else load(scene_file_path)
+		Game.scroll_to.call_deferred(scene)
