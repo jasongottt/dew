@@ -1,11 +1,13 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" uid="uid://77l214eqov24" path="res://scenes/basicEnemy.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scripts/enforcer.gd" id="2_script"]
 
-[node name="ToughEnemy" instance=ExtResource("1_base")]
+[node name="Enforcer" instance=ExtResource("1_base")]
+script = ExtResource("2_script")
 move_speed = 50.0
 health = 3
 drop_chance = 0.3
 
 [node name="AnimatedSprite2D" parent="." index="1"]
-modulate = Color(0.6, 0.6, 1, 1)
+modulate = Color(0.7, 0.3, 0.3, 1)

@@ -1,0 +1,12 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://77l214eqov24" path="res://scenes/basicEnemy.tscn" id="1_base"]
+
+[node name="Stiff" instance=ExtResource("1_base")]
+move_speed = 35.0
+health = 6
+drop_chance = 0.3
+group_size = 3
+
+[node name="AnimatedSprite2D" parent="." index="1"]
+modulate = Color(0.6, 0.75, 0.6, 1)

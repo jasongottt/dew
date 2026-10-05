@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://77l214eqov24" path="res://scenes/basicEnemy.tscn" id="1_base"]
 
-[node name="FastEnemy" instance=ExtResource("1_base")]
+[node name="Runner" instance=ExtResource("1_base")]
 move_speed = 150.0
 health = 2
 drop_chance = 0.2
