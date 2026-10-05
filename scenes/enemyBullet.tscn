@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/enemy_bullet.gd" id="1_eb"]
+[ext_resource type="Texture2D" uid="uid://cqishclvgf6n3" path="res://sprites/sheet.png" id="2_eb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eb"]
+size = Vector2(10, 10)
+
+[node name="EnemyBullet" type="Area2D" groups=["enemy_bullets"]]
+z_index = 6
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("1_eb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 0.25, 0.25, 1)
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("2_eb")
+region_enabled = true
+region_rect = Rect2(6, 21, 4, 4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_eb")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

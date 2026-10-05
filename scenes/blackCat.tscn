@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/black_cat.gd" id="1_cat"]
+[ext_resource type="Texture2D" path="res://sprites/cat.png" id="2_cat"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cat"]
+size = Vector2(30, 30)
+
+[node name="BlackCat" type="Area2D" groups=["cats"]]
+z_index = 1
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_cat")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("2_cat")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_cat")
