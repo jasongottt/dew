@@ -1,6 +1,12 @@
 extends Node
 
 const START_LIVES = 3
+
+# the levels in the order you play them. walking out of the last one
+# goes back to the first (there's no ending yet)
+const LEVELS = [
+	"res://scenes/lvl1.tscn",
+]
 # how long the scroll between levels takes, and how far it scrolls.
 # 840 is one map's height (21 tiles), so the old bottom gate meets the new top gate
 const SCROLL_TIME = 1.5
@@ -40,6 +46,19 @@ func reset():
 
 func game_over():
 	get_tree().change_scene_to_file.call_deferred("res://scenes/game_over.tscn")
+
+# a fresh run from the first level
+func start():
+	reset()
+	get_tree().change_scene_to_file(LEVELS[0])
+
+# where walking out of a level takes you. a level that isn't in the list
+# (like a test copy) just plays again
+func level_after(path):
+	var i = LEVELS.find(path)
+	if i == -1:
+		return path
+	return LEVELS[(i + 1) % LEVELS.size()]
 
 # walking off the bottom: the old level slides up and away while the next one
 # slides up into place and the player walks down onto it, like prairie king.

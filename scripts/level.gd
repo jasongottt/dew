@@ -1,7 +1,6 @@
 extends Node2D
 
 @export var wave_time := 60.0
-@export var next_level: PackedScene
 # the merchant shows up once the level is cleared
 @export var has_shop := false
 # dark levels only show what's lit up
@@ -125,6 +124,4 @@ func _on_player_died():
 func _on_exit_body_entered(body):
 	if exit_open and not leaving and body == $Player:
 		leaving = true
-		# no next level yet, so this one again
-		var scene = next_level if next_level else load(scene_file_path)
-		Game.scroll_to.call_deferred(scene)
+		Game.scroll_to.call_deferred(load(Game.level_after(scene_file_path)))
