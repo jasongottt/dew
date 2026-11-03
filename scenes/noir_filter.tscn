@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[sub_resource type="Shader" id="Shader_noir"]
+code = "shader_type canvas_item;
+
+// the noir look, over everything apart from the HUD
+uniform sampler2D screen : hint_screen_texture, filter_nearest;
+// how much color is left, 0 is black and white
+uniform float color_left : hint_range(0.0, 1.0) = 0.15;
+// warm things (lit windows, your coat) keep more of theirs
+uniform float warm_color_left : hint_range(0.0, 1.0) = 0.9;
+// higher and things only a little warm count as warm too
+uniform float warm_pickiness : hint_range(1.0, 10.0) = 6.0;
+// above 1 the darks get darker and the lights lighter
+uniform float contrast : hint_range(0.5, 2.0) = 1.35;
+uniform float darken : hint_range(0.0, 0.5) = 0.05;
+// the contrast never takes the darks below this much of what they were,
+// or dark levels go pitch black
+uniform float keep_darks : hint_range(0.0, 1.0) = 0.75;
+// the shadows get tinted this color (not warm things)
+uniform vec4 shadow_tint : source_color = vec4(0.8, 0.85, 1.0, 1.0);
+// how dark the edges of the screen get, 0 is not at all
+uniform float vignette : hint_range(0.0, 1.0) = 0.6;
+
+void fragment() {
+	vec3 c = texture(screen, SCREEN_UV).rgb;
+	float grey = dot(c, vec3(0.299, 0.587, 0.114));
+	float warm = clamp((c.r - c.b) * warm_pickiness, 0.0, 1.0);
+	c = mix(vec3(grey), c, mix(color_left, warm_color_left, warm));
+	c = max(clamp((c - 0.45) * contrast + 0.45 - darken, 0.0, 1.0), c * keep_darks);
+	c *= mix(shadow_tint.rgb, vec3(1.0), max(grey, warm));
+	float edge = distance(SCREEN_UV, vec2(0.5));
+	c *= 1.0 - vignette * smoothstep(0.3, 0.75, edge);
+	COLOR = vec4(c, 1.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_noir"]
+shader = SubResource("Shader_noir")
+
+[node name="NoirFilter" type="CanvasLayer"]
+layer = 1
+
+[node name="Screen" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_noir")
+offset_right = 1600.0
+offset_bottom = 900.0
+mouse_filter = 2

@@ -7,6 +7,8 @@ extends Node2D
 @export var dark := false
 # a black cat runs across now and then, the mob chases it
 @export var black_cat := false
+# rain over the whole level, see rain.tscn. untick it anywhere indoors
+@export var raining := true
 # makes this a boss fight: no timer, no regular spawns
 @export var boss_scene: PackedScene
 
@@ -20,6 +22,7 @@ const CAT_GATES = [[Vector2i(17, 1), Vector2i(17, 19)], [Vector2i(8, 10), Vector
 
 var shop_scene = preload("res://scenes/shop.tscn")
 var cat_scene = preload("res://scenes/blackCat.tscn")
+var rain_scene = preload("res://scenes/rain.tscn")
 var cat_time := 0.0
 var time_left := 0.0
 var exit_open := false
@@ -36,6 +39,8 @@ func _ready():
 	make_gap()
 	map_paths()
 	check_start()
+	if raining:
+		make_rain()
 	if dark:
 		go_dark()
 	if boss_scene:
@@ -134,6 +139,16 @@ func make_gap():
 		shape.position = $gap.map_to_local(cell)
 		body.add_child(shape)
 	$gap.add_child(body)
+
+# covers wherever there's floor (it runs under the walls too), not the black outside
+func make_rain():
+	var rain = rain_scene.instantiate()
+	var tile = Vector2($floor.tile_set.tile_size) * $floor.scale
+	var area = $floor.get_used_rect()
+	rain.position = $floor.position + Vector2(area.position) * tile
+	rain.size = Vector2(area.size) * tile
+	rain.material.set_shader_parameter("size", rain.size)
+	add_child(rain)
 
 func in_gap(cell):
 	return has_node("gap") and $gap.get_cell_source_id(cell) != -1

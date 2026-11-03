@@ -16,6 +16,9 @@ const SCROLL_DISTANCE = 840.0
 # how fast you walk in to your start spot. if it's a long way the walk
 # carries on after the scroll, and the level waits until you're there
 const WALK_IN_SPEED = 300.0
+# the noir color filter over the game (the HUD stays as it is). false turns it off.
+# its settings are in noir_filter.tscn, and F7 flips it while you're testing
+const NOIR_FILTER = false
 
 # how often each drop shows up compared to the others
 const DROPS = {
@@ -40,6 +43,15 @@ var held_item = ""
 var boots = 0
 var gun = 0
 var ammo = 0
+
+var filter = preload("res://scenes/noir_filter.tscn").instantiate()
+
+func _ready():
+	filter.visible = NOIR_FILTER
+	add_child(filter)
+	# testing shortcuts (F1 to F7), see debug_keys.gd. only when run from the editor
+	if OS.is_debug_build():
+		add_child(preload("res://scripts/debug_keys.gd").new())
 
 func reset():
 	lives = START_LIVES

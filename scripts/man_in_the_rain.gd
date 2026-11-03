@@ -1,18 +1,32 @@
 extends "res://scripts/boss.gd"
 
 const LIT_RANGE = 100.0
-const LIT_AFTER_STRIKE = 1.0
+const LIT_AFTER_STRIKE = 2.5
 const MARK_TIME = 1.5
 const SUMMON_EVERY = 10.0
+# lightning striking this close to his middle catches him (he's big),
+# he stops and stays lit for a while
+const STUN_REACH = 80.0
+const STUN_TIME = 3.0
+
+# while he's hidden he's still faintly there, so you can keep track of him.
+# it ignores the dark, so it shows up on a black floor
+@export var hidden_color := Color(0.7, 0.75, 0.85, 0.15)
 
 var mark_scene = preload("res://scenes/lightning.tscn")
 var shadow_scene = preload("res://scenes/shadow.tscn")
 var strike_timer := 4.0
 var summon_timer := SUMMON_EVERY
 var lit_time := 0.0
+var lit_color: Color
+var faint = CanvasItemMaterial.new()
 
 func _ready():
 	super()
+	lit_color = $AnimatedSprite2D.modulate
+	faint.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	# no light of his own, it would give him away
+	$PointLight2D.visible = false
 	# he only comes out in the dark
 	if not get_parent().dark:
 		get_parent().go_dark()
@@ -24,7 +38,8 @@ func _physics_process(delta):
 	# only seen, and only hit, while something lights him up
 	lit_time -= delta
 	var lit = lit_time > 0 or player.whiteout > 0.3 or global_position.distance_to(player.global_position) < LIT_RANGE
-	$AnimatedSprite2D.visible = lit
+	$AnimatedSprite2D.modulate = lit_color if lit else hidden_color
+	$AnimatedSprite2D.material = null if lit else faint
 	collision_layer = 3 if lit else 1
 
 	if frozen():
@@ -61,5 +76,9 @@ func call_lightning():
 		mark.global_position = spot
 		get_parent().add_child(mark)
 
-func lightning_struck():
-	lit_time = LIT_AFTER_STRIKE
+func lightning_struck(spot):
+	lit_time = max(lit_time, LIT_AFTER_STRIKE)
+	# caught under it
+	if global_position.distance_to(spot) < STUN_REACH:
+		idle_time = STUN_TIME
+		lit_time = STUN_TIME

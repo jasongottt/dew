@@ -27,5 +27,5 @@ func shove(_direction):
 	pass
 
 # the man in the rain cares about this, other bosses don't
-func lightning_struck():
+func lightning_struck(_spot):
 	pass

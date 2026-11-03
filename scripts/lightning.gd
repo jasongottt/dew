@@ -15,7 +15,7 @@ func _process(delta):
 func strike():
 	var player = get_parent().get_node("Player")
 	player.whiteout = max(player.whiteout, 0.6)
-	get_tree().call_group("bosses", "lightning_struck")
+	get_tree().call_group("bosses", "lightning_struck", global_position)
 	if global_position.distance_to(player.global_position) < RADIUS:
 		player.take_hit()
 	for enemy in get_tree().get_nodes_in_group("enemies"):

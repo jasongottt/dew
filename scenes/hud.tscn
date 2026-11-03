@@ -27,6 +27,7 @@ shader = SubResource("Shader_fog")
 
 [node name="HUD" type="CanvasLayer"]
 process_mode = 3
+layer = 2
 script = ExtResource("1_hud")
 
 [node name="Fog" type="ColorRect" parent="."]
