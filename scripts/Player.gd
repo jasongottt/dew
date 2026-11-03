@@ -17,7 +17,8 @@ var effects = {}
 var whiteout = 0.0
 
 func _ready():
-	pass
+	# the gap between roofs is on layer 4, so you can't walk off the edge
+	set_collision_mask_value(4, true)
 	
 func _physics_process(delta):
 	for effect in effects.keys():

@@ -9,6 +9,11 @@ extends Node2D
 # how many arrive at once at the start of the wave, and by the end of it
 @export var group_start: int = 1
 @export var group_end: int = 2
+# untick a gate and nothing comes out of it on this level
+@export var top_gate := true
+@export var bottom_gate := true
+@export var left_gate := true
+@export var right_gate := true
 
 const SPAWN_TILES := {
 	"top": [
@@ -56,7 +61,7 @@ func spawn_enemy():
 	# a group takes up one free tile each in the same gate.
 	# if every gate is busy this one just doesn't come
 	var gates = []
-	for gate_tiles in SPAWN_TILES.values():
+	for gate_tiles in open_gates():
 		var free = gate_tiles.filter(func(tile): return is_free(tile_position(tile)))
 		if not free.is_empty():
 			gates.append(free)
@@ -114,6 +119,14 @@ func edge_point():
 
 # one enemy on every gate tile at once
 func rush():
-	for edge in SPAWN_TILES:
-		for tile in SPAWN_TILES[edge]:
+	for gate in open_gates():
+		for tile in gate:
 			spawn_at(tile)
+
+# the tiles of each gate that's open on this level
+func open_gates():
+	var open = []
+	for edge in SPAWN_TILES:
+		if get(edge + "_gate"):
+			open.append(SPAWN_TILES[edge])
+	return open

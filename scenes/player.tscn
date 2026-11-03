@@ -3,11 +3,11 @@
 [ext_resource type="Script" uid="uid://3fu1gfjxsgvv" path="res://scripts/Player.gd" id="1_8vds6"]
 [ext_resource type="Texture2D" uid="uid://cjt8nslnir1g6" path="res://sprites/light.webp" id="2_3topc"]
 [ext_resource type="Texture2D" uid="uid://cqishclvgf6n3" path="res://sprites/sheet.png" id="2_l1vic"]
-[ext_resource type="Script" path="res://scripts/powerups.gd" id="4_pow"]
-[ext_resource type="Texture2D" path="res://sprites/muzzle_flash.png" id="5_flash"]
+[ext_resource type="Script" uid="uid://ckehf1yfc6n0" path="res://scripts/powerups.gd" id="4_pow"]
+[ext_resource type="Texture2D" uid="uid://dy5j3tjt55ujr" path="res://sprites/muzzle_flash.png" id="5_flash"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sdb2s"]
-size = Vector2(40, 42)
+size = Vector2(36.598022, 36.598022)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bp7kc"]
 size = Vector2(40, 42.0182)
@@ -132,7 +132,7 @@ texture = ExtResource("2_3topc")
 texture_scale = 0.35
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1900093442]
-position = Vector2(0, 1)
+position = Vector2(0, 0.9999999)
 scale = Vector2(0.929012, 0.929012)
 shape = SubResource("RectangleShape2D_sdb2s")
 

@@ -28,7 +28,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p4w0v"]
-size = Vector2(15.200002, 16.000002)
+size = Vector2(15.2, 15.2)
 
 [node name="BasicEnemy" type="CharacterBody2D" unique_id=1042046870 groups=["enemies"]]
 scale = Vector2(2.5, 2.5)
@@ -53,6 +53,6 @@ autoplay = "walk"
 frame_progress = 0.35218194
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=264125637]
-position = Vector2(0.3999999, 1.9073484e-07)
+position = Vector2(0, 0)
 scale = Vector2(0.99999976, 0.99999976)
 shape = SubResource("RectangleShape2D_p4w0v")

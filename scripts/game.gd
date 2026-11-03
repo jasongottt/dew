@@ -6,11 +6,16 @@ const START_LIVES = 3
 # goes back to the first (there's no ending yet)
 const LEVELS = [
 	"res://scenes/lvl1.tscn",
+	"res://scenes/lvl2.tscn",
+	"res://scenes/lvl3.tscn",
 ]
 # how long the scroll between levels takes, and how far it scrolls.
 # 840 is one map's height (21 tiles), so the old bottom gate meets the new top gate
 const SCROLL_TIME = 1.5
 const SCROLL_DISTANCE = 840.0
+# how fast you walk in to your start spot. if it's a long way the walk
+# carries on after the scroll, and the level waits until you're there
+const WALK_IN_SPEED = 300.0
 
 # how often each drop shows up compared to the others
 const DROPS = {
@@ -80,21 +85,30 @@ func scroll_to(scene):
 		old.get_node("Dark").free()
 	old.get_node("HUD").visible = false
 
-	# swap in the new level's player right where the old one is standing
+	# swap in the new level's player right where the old one is standing.
+	# they walk in to wherever the Player sits in the new level's scene
 	var old_player = old.get_node("Player")
 	var player = new.get_node("Player")
 	var start = player.position
 	player.position = old_player.position - Vector2(0, SCROLL_DISTANCE)
 	old_player.visible = false
+	# over the black border tiles of both levels until they're in
+	var z = player.z_index
+	player.z_index = new.get_node("border").z_index + 1
 	for sprite in [player.get_node("top"), player.get_node("bottom")]:
 		sprite.process_mode = Node.PROCESS_MODE_ALWAYS
-	player.get_node("top").play("down")
 	player.get_node("bottom").play("walk")
 
 	var tween = create_tween().set_parallel()
 	tween.tween_property(old, "position:y", -SCROLL_DISTANCE, SCROLL_TIME)
 	tween.tween_property(new, "position:y", 0.0, SCROLL_TIME)
-	tween.tween_property(player, "position", start, SCROLL_TIME)
+
+	var walk = create_tween()
+	var from = player.position
+	for point in new.walk_in(from, start):
+		walk.tween_callback(player.get_node("top").play.bind(facing(point - from)))
+		walk.tween_property(player, "position", point, from.distance_to(point) / WALK_IN_SPEED)
+		from = point
 	await tween.finished
 
 	# take the old level out first so the new one can have its proper name back
@@ -102,9 +116,18 @@ func scroll_to(scene):
 	old.queue_free()
 	new.name = level_name
 	tree.current_scene = new
+	if walk.is_running():
+		await walk.finished
+	player.z_index = z
 	for sprite in [player.get_node("top"), player.get_node("bottom")]:
 		sprite.process_mode = Node.PROCESS_MODE_INHERIT
 	new.process_mode = Node.PROCESS_MODE_INHERIT
+
+# which way the player looks while walking in that direction
+func facing(direction):
+	if abs(direction.x) > abs(direction.y):
+		return "right" if direction.x > 0 else "left"
+	return "down" if direction.y > 0 else "up"
 
 func random_drop():
 	var total = 0

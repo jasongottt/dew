@@ -36,6 +36,14 @@ func _physics_process(delta):
 		move_and_slide()
 		return
 
+	# something's in the way, go round it a tile at a time
+	if not moving and not lost():
+		var next = way_around()
+		if next != null:
+			move_direction = global_position.direction_to(next)
+			target_position = next
+			moving = true
+
 	if not moving:
 		var angle = global_position.angle_to_point(target())
 		if lost():
@@ -78,6 +86,13 @@ func target():
 		if global_position.distance_to(lure.global_position) < global_position.distance_to(nearest.global_position):
 			nearest = lure
 	return nearest.global_position
+
+# the next tile to head for when walls or a gap block the straight line to the target.
+# shadows walk through walls, so they never bother
+func way_around():
+	if not get_collision_mask_value(1) or not get_parent().has_method("way_to"):
+		return null
+	return get_parent().way_to(global_position, target())
 
 # the flashbulb stops everything
 func frozen():
