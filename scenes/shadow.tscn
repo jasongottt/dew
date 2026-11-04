@@ -10,6 +10,7 @@ move_speed = 60.0
 drop_chance = 0.15
 flying = true
 edge_spawn = true
+outline = false
 
 [node name="AnimatedSprite2D" parent="." index="1"]
 modulate = Color(0, 0, 0, 1)

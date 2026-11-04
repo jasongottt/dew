@@ -19,6 +19,9 @@ const WALK_IN_SPEED = 300.0
 # the noir color filter over the game (the HUD stays as it is). false turns it off.
 # its settings are in noir_filter.tscn, and F7 flips it while you're testing
 const NOIR_FILTER = false
+# a thin light outline around enemies so they show up on a dark floor. false turns
+# it off. its color is in outline.tscn, and F9 flips it while you're testing
+const ENEMY_OUTLINES = true
 
 # how often each drop shows up compared to the others
 const DROPS = {
@@ -45,11 +48,12 @@ var gun = 0
 var ammo = 0
 
 var filter = preload("res://scenes/noir_filter.tscn").instantiate()
+var outlines = ENEMY_OUTLINES
 
 func _ready():
 	filter.visible = NOIR_FILTER
 	add_child(filter)
-	# testing shortcuts (F1 to F7), see debug_keys.gd. only when run from the editor
+	# testing shortcuts (F1 to F7, F9), see debug_keys.gd. only when run from the editor
 	if OS.is_debug_build():
 		add_child(preload("res://scripts/debug_keys.gd").new())
 
@@ -104,6 +108,9 @@ func scroll_to(scene):
 	var start = player.position
 	player.position = old_player.position - Vector2(0, SCROLL_DISTANCE)
 	old_player.visible = false
+	# the old level gets darker away from the player who's walking in, not the hidden one
+	if old.has_node("Gloom"):
+		old.get_node("Gloom").follow = player
 	# over the black border tiles of both levels until they're in
 	var z = player.z_index
 	player.z_index = new.get_node("border").z_index + 1

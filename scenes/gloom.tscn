@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/gloom.gd" id="1_gloom"]
+
+[sub_resource type="Shader" id="Shader_gloom"]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+// a pool of light around the player that fades into the dark, drawn in
+// art pixels and dithered like an old arcade machine would (see gloom.gd)
+uniform sampler2D screen : hint_screen_texture, filter_nearest;
+// how much brighter it is right around the player, 0 is no light
+uniform float light : hint_range(0.0, 1.0) = 0.3;
+// the light's color, it only tints the shades brighter than normal
+uniform vec4 light_color : source_color = vec4(1.0, 0.8, 0.55, 1.0);
+// how dark it gets at its darkest, 0 is not at all
+uniform float darkness : hint_range(0.0, 1.0) = 0.45;
+// as dark as it gets from this far out, in screen pixels
+uniform float far : hint_range(0.0, 1200.0) = 520.0;
+// how many shades it has between the light and the dark. it's dithered
+// in between them, so from a distance it looks like a smooth fade
+uniform int rings : hint_range(1, 16) = 6;
+// the size of an art pixel on screen
+uniform float pixel = 2.5;
+// where the player is, gloom.gd keeps it up to date
+uniform vec2 centre;
+
+varying vec2 spot;
+
+void vertex() {
+	spot = VERTEX;
+}
+
+void fragment() {
+	// whole art pixels, so it only moves a pixel at a time
+	vec2 p = floor(spot / pixel);
+	float ring_size = far / pixel / float(rings);
+	float f = distance(p, floor(centre / pixel)) / ring_size;
+	// ordered dither: each pixel in a 4x4 block switches to the next shade
+	// at a different point, so the shades mix in a fixed checker pattern
+	const float BAYER[16] = { 0.0, 8.0, 2.0, 10.0, 12.0, 4.0, 14.0, 6.0, 3.0, 11.0, 1.0, 9.0, 15.0, 7.0, 13.0, 5.0 };
+	int i = int(mod(p.y, 4.0)) * 4 + int(mod(p.x, 4.0));
+	float ring = clamp(floor(f + (BAYER[i] + 0.5) / 16.0), 0.0, float(rings));
+	float bright = mix(1.0 + light, 1.0 - darkness, ring / float(rings));
+	vec3 tint = vec3(min(bright, 1.0)) + max(bright - 1.0, 0.0) * light_color.rgb;
+	COLOR = vec4(texture(screen, SCREEN_UV).rgb * tint, 1.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gloom"]
+resource_local_to_scene = true
+shader = SubResource("Shader_gloom")
+
+[node name="Gloom" type="ColorRect"]
+process_mode = 3
+z_index = 30
+material = SubResource("ShaderMaterial_gloom")
+mouse_filter = 2
+script = ExtResource("1_gloom")

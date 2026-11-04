@@ -4,6 +4,8 @@ var direction := Vector2.ZERO
 
 func _ready():
 	super()
+	if outline:
+		add_outline($CrowSprite)
 	# flies straight at where you were when it showed up
 	if player:
 		direction = global_position.direction_to(player.global_position)

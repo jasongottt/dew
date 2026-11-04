@@ -11,9 +11,13 @@ extends CharacterBody2D
 @export var group_size := 1
 # comes in from anywhere around the edge instead of a gate
 @export var edge_spawn := false
+# a thin light line around the sprite so dark enemies show up on a dark floor.
+# untick it for anyone who's meant to be hard to see. see outline.tscn
+@export var outline := true
 
 var pickup_scene = preload("res://scenes/pickup.tscn")
 var bullet_scene = preload("res://scenes/enemyBullet.tscn")
+var outline_scene = preload("res://scenes/outline.tscn")
 var player: Node2D
 var target_position: Vector2
 var moving := false
@@ -24,6 +28,11 @@ func _ready():
 	player = get_tree().get_root().find_child("Player", true, false)
 	randomize()
 	$PointLight2D.visible = get_parent().get("dark") == true
+	if outline and $AnimatedSprite2D.visible:
+		add_outline($AnimatedSprite2D)
+
+func add_outline(sprite):
+	sprite.add_child(outline_scene.instantiate())
 
 func _physics_process(delta):
 	if player == null or frozen():

@@ -11,12 +11,12 @@ offset_bottom = 900.0
 color = Color(0, 0, 0, 1)
 
 [node name="Name" type="Label" parent="."]
-offset_left = 500.0
+offset_left = 200.0
 offset_top = 340.0
-offset_right = 1100.0
+offset_right = 1400.0
 offset_bottom = 420.0
 theme_override_font_sizes/font_size = 64
-text = "dew"
+text = "Vengeance of the City Drifter"
 horizontal_alignment = 1
 
 [node name="Hint" type="Label" parent="."]

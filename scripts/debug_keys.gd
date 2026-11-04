@@ -9,6 +9,7 @@ extends CanvasLayer
 #   F5  +10 coins
 #   F6  invincible on/off
 #   F7  noir filter on/off (works on the title screen too)
+#   F9  enemy outlines on/off (F8 is godot's stop button)
 
 const POWERUPS = ["coffee", "sawed_off", "flashbulb", "fog", "flare", "trench_coat", "whiskey", "lucky_coin", "ghost", "lightning"]
 const MESSAGE_TIME = 1.5
@@ -46,6 +47,10 @@ func _unhandled_key_input(event):
 	if event.physical_keycode == KEY_F7:
 		Game.filter.visible = not Game.filter.visible
 		say("filter " + ("on" if Game.filter.visible else "off"))
+		return
+	if event.physical_keycode == KEY_F9:
+		Game.outlines = not Game.outlines
+		say("outlines " + ("on" if Game.outlines else "off"))
 		return
 	var level = current_level()
 	if level == null:

@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/outline.gd" id="1_outline"]
+
+[sub_resource type="Shader" id="Shader_outline"]
+code = "shader_type canvas_item;
+
+// the outline around enemies (see outline.gd). keep it dim, it only has to
+// lift them off a dark floor. the enemy's own tint doesn't change it, but it
+// fades out along with the enemy (a shadow, the man in the rain hiding)
+uniform vec4 color : source_color = vec4(0.3, 0.3, 0.33, 1.0);
+
+varying float fade;
+
+void vertex() {
+	fade = COLOR.a;
+}
+
+void fragment() {
+	COLOR = vec4(color.rgb, texture(TEXTURE, UV).a * color.a * fade);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_outline"]
+shader = SubResource("Shader_outline")
+
+[node name="Outline" type="Node2D"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_outline")
+script = ExtResource("1_outline")

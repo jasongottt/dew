@@ -9,6 +9,9 @@ extends Node2D
 @export var black_cat := false
 # rain over the whole level, see rain.tscn. untick it anywhere indoors
 @export var raining := true
+# on lit levels there's a pool of light around you that gets darker in rings
+# the farther out it goes, see gloom.tscn. dark levels have their own
+@export var gloom := true
 # makes this a boss fight: no timer, no regular spawns
 @export var boss_scene: PackedScene
 
@@ -23,6 +26,7 @@ const CAT_GATES = [[Vector2i(17, 1), Vector2i(17, 19)], [Vector2i(8, 10), Vector
 var shop_scene = preload("res://scenes/shop.tscn")
 var cat_scene = preload("res://scenes/blackCat.tscn")
 var rain_scene = preload("res://scenes/rain.tscn")
+var gloom_scene = preload("res://scenes/gloom.tscn")
 var cat_time := 0.0
 var time_left := 0.0
 var exit_open := false
@@ -30,6 +34,8 @@ var arrow_time := 0.0
 var frozen := false
 var boss = null
 var leaving := false
+# where the Player sits in the scene. you come back here after dying
+var start_spot := Vector2()
 # which tiles the mob can walk on, so they can find a way around walls and gaps
 var paths = AStarGrid2D.new()
 
@@ -39,6 +45,7 @@ func _ready():
 	make_gap()
 	map_paths()
 	check_start()
+	start_spot = $Player.position
 	if raining:
 		make_rain()
 	if dark:
@@ -49,6 +56,9 @@ func _ready():
 		boss = boss_scene.instantiate()
 		boss.global_position = tile_position(SHOP_TILE)
 		add_child(boss)
+	# after the boss, the man in the rain makes it dark
+	if gloom and not dark:
+		make_gloom()
 
 func go_dark():
 	dark = true
@@ -57,6 +67,8 @@ func go_dark():
 	shade.color = DARK_COLOR
 	add_child(shade)
 	$Player/PointLight2D.visible = true
+	if has_node("Gloom"):
+		$Gloom.free()
 
 func _process(delta):
 	# the flashbulb lights everything up for a moment
@@ -140,15 +152,27 @@ func make_gap():
 		body.add_child(shape)
 	$gap.add_child(body)
 
-# covers wherever there's floor (it runs under the walls too), not the black outside
 func make_rain():
 	var rain = rain_scene.instantiate()
-	var tile = Vector2($floor.tile_set.tile_size) * $floor.scale
-	var area = $floor.get_used_rect()
-	rain.position = $floor.position + Vector2(area.position) * tile
-	rain.size = Vector2(area.size) * tile
+	var area = floor_area()
+	rain.position = area.position
+	rain.size = area.size
 	rain.material.set_shader_parameter("size", rain.size)
 	add_child(rain)
+
+func make_gloom():
+	var shade = gloom_scene.instantiate()
+	var area = floor_area()
+	shade.position = area.position
+	shade.size = area.size
+	shade.follow = $Player
+	add_child(shade)
+
+# wherever there's floor (it runs under the walls too), not the black outside
+func floor_area():
+	var tile = Vector2($floor.tile_set.tile_size) * $floor.scale
+	var area = $floor.get_used_rect()
+	return Rect2($floor.position + Vector2(area.position) * tile, Vector2(area.size) * tile)
 
 func in_gap(cell):
 	return has_node("gap") and $gap.get_cell_source_id(cell) != -1
@@ -263,6 +287,7 @@ func _on_player_died():
 	for bullet in get_tree().get_nodes_in_group("enemy_bullets"):
 		bullet.queue_free()
 	get_tree().call_group("bosses", "idle_for", 2.0)
+	$Player.position = start_spot
 	$Player.respawn()
 
 func _on_exit_body_entered(body):
