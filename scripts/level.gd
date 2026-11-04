@@ -19,7 +19,6 @@ const EXIT_TILES = [Vector2i(16, 19), Vector2i(17, 19), Vector2i(18, 19)]
 # the top gate, where you walk in from the level before
 const ENTRANCE_TILES = [Vector2i(16, 1), Vector2i(17, 1), Vector2i(18, 1)]
 const SHOP_TILE = Vector2i(17, 6)
-const DARK_COLOR = Color(0.15, 0.15, 0.2)
 # the cat runs between opposite gates
 const CAT_GATES = [[Vector2i(17, 1), Vector2i(17, 19)], [Vector2i(8, 10), Vector2i(26, 10)]]
 
@@ -27,6 +26,7 @@ var shop_scene = preload("res://scenes/shop.tscn")
 var cat_scene = preload("res://scenes/blackCat.tscn")
 var rain_scene = preload("res://scenes/rain.tscn")
 var gloom_scene = preload("res://scenes/gloom.tscn")
+var dark_scene = preload("res://scenes/dark.tscn")
 var cat_time := 0.0
 var time_left := 0.0
 var exit_open := false
@@ -60,21 +60,20 @@ func _ready():
 	if gloom and not dark:
 		make_gloom()
 
+# how dark, and how the lights look, is in dark.tscn
 func go_dark():
 	dark = true
-	var shade = CanvasModulate.new()
-	shade.name = "Dark"
-	shade.color = DARK_COLOR
+	var shade = dark_scene.instantiate()
+	var area = floor_area()
+	shade.position = area.position
+	shade.size = area.size
+	shade.player = $Player
 	add_child(shade)
 	$Player/PointLight2D.visible = true
 	if has_node("Gloom"):
 		$Gloom.free()
 
 func _process(delta):
-	# the flashbulb lights everything up for a moment
-	if dark:
-		$Dark.color = DARK_COLOR.lerp(Color.WHITE, $Player.whiteout)
-
 	if time_left > 0:
 		time_left -= delta
 		if time_left <= 0:

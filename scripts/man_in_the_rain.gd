@@ -10,7 +10,7 @@ const STUN_REACH = 80.0
 const STUN_TIME = 3.0
 
 # while he's hidden he's still faintly there, so you can keep track of him.
-# it ignores the dark, so it shows up on a black floor
+# he's drawn over the dark then (dark.tscn), so it shows up on a black floor
 @export var hidden_color := Color(0.7, 0.75, 0.85, 0.15)
 
 var mark_scene = preload("res://scenes/lightning.tscn")
@@ -19,12 +19,12 @@ var strike_timer := 4.0
 var summon_timer := SUMMON_EVERY
 var lit_time := 0.0
 var lit_color: Color
-var faint = CanvasItemMaterial.new()
+var lit_z: int
 
 func _ready():
 	super()
 	lit_color = $AnimatedSprite2D.modulate
-	faint.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	lit_z = $AnimatedSprite2D.z_index
 	# no light of his own, it would give him away
 	$PointLight2D.visible = false
 	# he only comes out in the dark
@@ -39,7 +39,7 @@ func _physics_process(delta):
 	lit_time -= delta
 	var lit = lit_time > 0 or player.whiteout > 0.3 or global_position.distance_to(player.global_position) < LIT_RANGE
 	$AnimatedSprite2D.modulate = lit_color if lit else hidden_color
-	$AnimatedSprite2D.material = null if lit else faint
+	$AnimatedSprite2D.z_index = lit_z if lit else get_parent().get_node("Dark").z_index + 1
 	collision_layer = 3 if lit else 1
 
 	if frozen():

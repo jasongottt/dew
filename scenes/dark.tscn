@@ -1,0 +1,63 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/dark.gd" id="1_dark"]
+
+[sub_resource type="Shader" id="Shader_dark"]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+// dark levels: everything's dark apart from what the lights reach, drawn in
+// shades of art pixels with a dither between them like gloom.tscn (see dark.gd)
+uniform sampler2D screen : hint_screen_texture, filter_nearest;
+// how dark it is where no light reaches
+uniform vec4 dark_color : source_color = vec4(0.15, 0.15, 0.2, 1.0);
+// how big a jump each shade of light is. bigger is fewer, harder shades
+uniform float shade : hint_range(0.01, 1.0) = 0.15;
+// the size of an art pixel on screen
+uniform float pixel = 2.5;
+// the flashbulb and lightning, 1 lights everything up
+uniform float flash = 0.0;
+// the lights, dark.gd fills these in every frame. the color's alpha is how bright
+uniform int light_count = 0;
+uniform vec2 light_spots[32];
+uniform float light_reach[32];
+uniform vec4 light_colors[32];
+
+varying vec2 spot;
+
+void vertex() {
+	spot = VERTEX;
+}
+
+void fragment() {
+	// whole art pixels, so lights only move a pixel at a time
+	vec2 p = floor(spot / pixel);
+	float total = 0.0;
+	vec3 color = vec3(0.0);
+	for (int n = 0; n < light_count; n++) {
+		float d = distance(p, floor(light_spots[n] / pixel)) * pixel;
+		float s = clamp(1.0 - d / light_reach[n], 0.0, 1.0) * light_colors[n].a;
+		total += s;
+		color += s * light_colors[n].rgb;
+	}
+	// ordered dither, the same as gloom.tscn
+	const float BAYER[16] = { 0.0, 8.0, 2.0, 10.0, 12.0, 4.0, 14.0, 6.0, 3.0, 11.0, 1.0, 9.0, 15.0, 7.0, 13.0, 5.0 };
+	float dither = (BAYER[int(mod(p.y, 4.0)) * 4 + int(mod(p.x, 4.0))] + 0.5) / 16.0;
+	float lit = max(floor(total / shade + dither), 0.0) * shade;
+	vec3 tint = dark_color.rgb + lit * color / max(total, 0.001);
+	// the flash fades out in dithered steps too
+	tint = mix(tint, vec3(1.0), floor(flash * 4.0 + dither) / 4.0);
+	COLOR = vec4(texture(screen, SCREEN_UV).rgb * tint, 1.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dark"]
+resource_local_to_scene = true
+shader = SubResource("Shader_dark")
+
+[node name="Dark" type="ColorRect"]
+process_mode = 3
+z_index = 30
+material = SubResource("ShaderMaterial_dark")
+mouse_filter = 2
+script = ExtResource("1_dark")

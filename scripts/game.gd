@@ -96,9 +96,6 @@ func scroll_to(scene):
 	new.position.y = SCROLL_DISTANCE
 	tree.root.add_child(new)
 
-	# the old level's darkness would cover both levels during the scroll
-	if old.has_node("Dark"):
-		old.get_node("Dark").free()
 	old.get_node("HUD").visible = false
 
 	# swap in the new level's player right where the old one is standing.
